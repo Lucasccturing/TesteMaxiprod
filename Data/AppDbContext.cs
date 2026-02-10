@@ -13,5 +13,11 @@ namespace SistemaResidencial.Data
 
         public DbSet<Pessoas> Pessoas { get; set; }
 
+        public DbSet<Categorias> Categorias { get; set; }
+
+        public DbSet<Transacao> Transacoes { get; set; }
+
+
+
     }
 }

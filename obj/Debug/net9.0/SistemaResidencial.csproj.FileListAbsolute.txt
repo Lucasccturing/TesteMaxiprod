@@ -42,3 +42,4 @@ C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Mono.TextTem
 C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\MySqlConnector.dll
 C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\System.CodeDom.dll
+C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\obj\Debug\net9.0\SistemaResidencial.sourcelink.json
