@@ -43,3 +43,8 @@ C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\MySqlConnect
 C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\System.CodeDom.dll
 C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\obj\Debug\net9.0\SistemaResidencial.sourcelink.json
+C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Frontend\Frontend\package-lock.json
+C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Frontend\Frontend\package.json
+C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Frontend\Frontend\tsconfig.app.json
+C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Frontend\Frontend\tsconfig.json
+C:\Users\lucas\Desktop\Maxiprod\SistemaResidencial\bin\Debug\net9.0\Frontend\Frontend\tsconfig.node.json

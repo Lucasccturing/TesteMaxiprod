@@ -8,9 +8,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddEndpointsApiExplorer();
+
+// Para exibir no Swagger os enums como strings
 builder.Services.AddSwaggerGen(c =>
 {
     c.SchemaFilter<EnumSchemaFilter>();
@@ -23,6 +35,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 var app = builder.Build();
+
+
+app.UseCors();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
