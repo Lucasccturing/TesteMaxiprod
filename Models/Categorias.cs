@@ -13,6 +13,7 @@ namespace SistemaResidencial.Models
         [Key]
         public int Id { get; set; }
         
+        [MaxLength(400, ErrorMessage = "A descrição deve ter no máximo 400 caracteres")]
         public string? Descricao { get; set; }
 
         public FinalidadeCategoria Finalidade { get; set; }

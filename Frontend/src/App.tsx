@@ -14,19 +14,18 @@ interface Pessoa {
 interface Categoria {
   id?: number;
   descricao: string;
-  tipo: string;
+  finalidade: number;
 }
 
 interface Transacao {
   id?: number;
   descricao: string;
   valor: number;
-  tipo: string;
+  tipo: number;
   categoriaId: number;
   pessoaId: number;
 }
 
-/* Tipagem dos relatórios vindos do backend */
 interface RelatorioPessoa {
   pessoaId: number;
   nome: string;
@@ -44,7 +43,9 @@ interface RelatorioCategoria {
 }
 
 export default function App() {
-  /* Controla o menu que está sendo exibido */
+
+  /* Controla o menu que está sendo exibido, alternando entre as seções de Pessoas, Categorias, Transações e os relatórios.
+   */
   const [menuAtual, setMenuAtual] = useState<
     | "pessoas"
     | "categorias"
@@ -66,16 +67,26 @@ export default function App() {
   async function handlePessoa(e: FormEvent) {
     e.preventDefault();
 
-    await api.post("/pessoas", {
-      nome,
-      idade: Number(idade),
-    });
+    try {
+      await api.post("/pessoas", {
+        nome,
+        idade: Number(idade),
+      });
 
-    setNome("");
-    setIdade("");
-    await loadPessoas();
+      setNome("");
+      setIdade("");
+
+      await loadPessoas();
+      alert("Pessoa cadastrada com sucesso!");
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        const msg = error.response.data.message || error.response.data;
+        alert(`Erro ao cadastrar pessoa: ${msg}`);
+      } else {
+        alert("Erro de conexão com o servidor.");
+      }
+    }
   }
-
   async function deletePessoa(id?: number) {
     if (!id) return;
     await api.delete(`/pessoas/${id}`);
@@ -84,7 +95,7 @@ export default function App() {
 
   // ===== CATEGORIAS =====
   const [descricaoCategoria, setDescricaoCategoria] = useState("");
-  const [tipoCategoria, setTipoCategoria] = useState<number | "">("");
+  const [finalidadeCategoria, setTipoCategoria] = useState<number | "">("");
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   async function loadCategorias() {
@@ -97,14 +108,14 @@ export default function App() {
 
     await api.post("/categorias", {
       descricao: descricaoCategoria,
-      tipo: tipoCategoria,
+      finalidade: finalidadeCategoria,
     });
 
     setDescricaoCategoria("");
     setTipoCategoria("");
     await loadCategorias();
+    alert("Categoria cadastrada com sucesso!");
   }
-
   async function deleteCategoria(id?: number) {
     if (!id) return;
     await api.delete(`/categorias/${id}`);
@@ -112,9 +123,9 @@ export default function App() {
   }
 
   // ===== TRANSAÇÕES =====
-  const [descricaoTrabsacao, setDescricaoTransacao] = useState("");
+  const [descricaoTransacao, setDescricaoTransacao] = useState("");
   const [valorTransacao, setValorTransacao] = useState("");
-  const [tipoTransacao, setTipoTransacao] = useState("");
+  const [tipoTransacao, setTipoTransacao] = useState<number | "">("");
   const [categoriaId, setCategoriaId] = useState("");
   const [pessoaId, setPessoaId] = useState("");
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
@@ -127,20 +138,32 @@ export default function App() {
   async function handleTransacao(e: FormEvent) {
     e.preventDefault();
 
-    await api.post("/transacoes", {
-      descricao: descricaoTrabsacao,
-      valor: Number(valorTransacao),
-      tipo: tipoTransacao,
-      categoriaId: Number(categoriaId),
-      pessoaId: Number(pessoaId),
-    });
+    try {
+      await api.post("/transacoes", {
+        descricao: descricaoTransacao,
+        valor: Number(valorTransacao),
+        tipo: tipoTransacao,
+        categoriaId: Number(categoriaId),
+        pessoaId: Number(pessoaId),
+      });
+      setDescricaoTransacao("");
+      setValorTransacao("");
+      setTipoTransacao("");
+      setCategoriaId("");
+      setPessoaId("");
 
-    setDescricaoTransacao("");
-    setValorTransacao("");
-    setTipoTransacao("");
-    setCategoriaId("");
-    setPessoaId("");
-    await loadTransacoes();
+      await loadTransacoes();
+      alert("Transação cadastrada com sucesso!");
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        const backendMessage =
+          error.response.data.message || error.response.data;
+        alert(`Erro: ${backendMessage}`);
+      } else {
+        alert("Ocorreu um erro inesperado ao conectar com o servidor.");
+      }
+      console.error("Erro na requisição:", error);
+    }
   }
 
   async function deleteTransacao(id?: number) {
@@ -159,6 +182,8 @@ export default function App() {
     try {
       const response = await api.get("/Relatorios/totais-por-pessoa");
       // Extrai apenas a lista de pessoas do objeto
+      // O backend retorna um objeto com a estrutura { pessoas: [...] },
+      // então acessamos a propriedade 'pessoas' para obter a lista correta.
       setRelatorioPessoa(response.data.pessoas);
     } catch (error) {
       console.error(error);
@@ -176,7 +201,7 @@ export default function App() {
     }
   }
 
-  /* useEffect carrega dados conforme menu selecionado */
+  // useEffect carrega dados conforme menu selecionado
   useEffect(() => {
     if (menuAtual === "pessoas") loadPessoas();
     if (menuAtual === "categorias") loadCategorias();
@@ -184,7 +209,10 @@ export default function App() {
     if (menuAtual === "relTotalPessoa") loadRelatorioPessoa();
     if (menuAtual === "relTotalCategoria") loadRelatorioCategoria();
   }, [menuAtual]);
+
+
   return (
+
     // O layout é simples, com um menu no topo para alternar entre as seções e cada seção renderiza seu conteúdo específico.
     <div className="w-full min-h-screen bg-gray-900">
       <main className="pt-10 px-4">
@@ -253,7 +281,7 @@ export default function App() {
         </div>
 
         {/* ===== PESSOAS ===== 
-        Setar dados para cadastro e estilização básica para o formulário de cadastro e a listagem de pessoas. 
+        Setar dados para cadastro e estilização básica para o formulário e a listagem de pessoas. 
         Há duas colunas: a primeira para o formulário de cadastro e a segunda para a listagem.
         */}
         {menuAtual === "pessoas" && (
@@ -325,7 +353,7 @@ export default function App() {
                 <label className="text-white">Tipo:</label>
                 <select
                   className="mb-3 p-2 rounded text-white bg-gray-700"
-                  value={tipoCategoria}
+                  value={finalidadeCategoria}
                   onChange={(e) => setTipoCategoria(Number(e.target.value))}
                 >
                   <option value="">Selecione</option>
@@ -346,7 +374,7 @@ export default function App() {
               <div className="grid grid-cols-4 text-gray-300 font-semibold text-sm border-b border-gray-700 pb-1">
                 <span>Código</span>
                 <span>Descrição</span>
-                <span>Tipo</span>
+                <span>Finalidade</span>
                 <span>Ações</span>
               </div>
 
@@ -357,7 +385,13 @@ export default function App() {
                 >
                   <span>{c.id ?? "-"}</span>
                   <span>{c.descricao}</span>
-                  <span>{c.tipo}</span>
+                  <span>
+                    {c.finalidade === 1
+                      ? "Receita"
+                      : c.finalidade === 2
+                        ? "Despesa"
+                        : "Ambas"}
+                  </span>
                   <FiTrash2
                     onClick={() => deleteCategoria(c.id)}
                     className="cursor-pointer text-red-400"
@@ -377,7 +411,7 @@ export default function App() {
                 <input
                   placeholder="Descrição da transação"
                   className="mb-3 p-2 rounded text-white bg-gray-700"
-                  value={descricaoTrabsacao}
+                  value={descricaoTransacao}
                   onChange={(e) => setDescricaoTransacao(e.target.value)}
                 />
 
@@ -390,12 +424,15 @@ export default function App() {
                 />
 
                 <label className="text-white">Tipo:</label>
-                <input
-                  placeholder="1 = Receita"
+                <select
                   className="mb-3 p-2 rounded text-white bg-gray-700"
                   value={tipoTransacao}
-                  onChange={(e) => setTipoTransacao(e.target.value)}
-                />
+                  onChange={(e) => setTipoTransacao(Number(e.target.value))}
+                >
+                  <option value="">Selecione</option>
+                  <option value={1}>Receita</option>
+                  <option value={2}>Despesa</option>
+                </select>
 
                 <label className="text-white">Categoria Id:</label>
                 <input
@@ -442,7 +479,7 @@ export default function App() {
                   <span>{t.id ?? "-"}</span>
                   <span>{t.descricao}</span>
                   <span>{t.valor}</span>
-                  <span>{t.tipo}</span>
+                  <span>{t.tipo === 1 ? "Receita" : "Despesa"}</span>
                   <span>{t.categoriaId}</span>
                   <span>{t.pessoaId}</span>
                   <FiTrash2
@@ -480,6 +517,35 @@ export default function App() {
                 <span>{r.saldo}</span>
               </div>
             ))}
+            {/* Linha de Soma Total: 
+            utiliza reduce para somar os totais de receitas, despesas e saldo, exibindo um resumo geral no final do relatório.
+            */}
+            <div className="grid grid-cols-5 text-yellow-200 font-bold text-sm py-3">
+              <span>TOTAL GERAL</span>
+              <span>-</span>
+              <span>
+                {relatorioPessoa
+                  .reduce((acc, curr) => acc + curr.totalReceitas, 0)
+                  .toFixed(2)}
+              </span>
+              <span className="text-red-400">
+                {relatorioPessoa
+                  .reduce((acc, curr) => acc + curr.totalDespesas, 0)
+                  .toFixed(2)}
+              </span>
+              <span
+                className={
+                  relatorioPessoa.reduce((acc, curr) => acc + curr.saldo, 0) >=
+                  0
+                    ? "text-green-400"
+                    : "text-red-500"
+                }
+              >
+                {relatorioPessoa
+                  .reduce((acc, curr) => acc + curr.saldo, 0)
+                  .toFixed(2)}
+              </span>
+            </div>
           </div>
         )}
 
@@ -510,6 +576,38 @@ export default function App() {
                 <span>{r.saldo}</span>
               </div>
             ))}
+
+            {/* Mesma lógica da Linha de Soma Total anterior: 
+            utiliza reduce para somar os totais de receitas, despesas e saldo, exibindo um resumo geral no final do relatório.
+            */}
+            <div className="grid grid-cols-5 text-yellow-200 font-bold text-sm py-3">
+              <span>TOTAL GERAL</span>
+              <span>-</span>
+              <span>
+                {relatorioCategoria
+                  .reduce((acc, curr) => acc + curr.totalReceitas, 0)
+                  .toFixed(2)}
+              </span>
+              <span className="text-red-400">
+                {relatorioCategoria
+                  .reduce((acc, curr) => acc + curr.totalDespesas, 0)
+                  .toFixed(2)}
+              </span>
+              <span
+                className={
+                  relatorioCategoria.reduce(
+                    (acc, curr) => acc + curr.saldo,
+                    0,
+                  ) >= 0
+                    ? "text-green-400"
+                    : "text-red-500"
+                }
+              >
+                {relatorioCategoria
+                  .reduce((acc, curr) => acc + curr.saldo, 0)
+                  .toFixed(2)}
+              </span>
+            </div>
           </div>
         )}
       </main>

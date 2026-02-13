@@ -36,6 +36,7 @@ Este projeto é uma aplicação Full Stack desenvolvida como teste técnico para
 * **Por Pessoa:** Lista nome, total de receitas, total de despesas e saldo individual. Ao final, exibe o balanço líquido de todas as pessoas somadas.
 * **Por Categoria:** Agrupamento de gastos e ganhos por tipo de categoria com saldo final.
 
+#### OBS: A lógica de cálculo de saldos foi mantida no Back-end (RelatoriosController) para garantir que os dados cheguem prontos e validados para a interface. Tipagem Forte: O uso de TypeScript no Front-end e Classes/Enums no C# reduz erros de comunicação entre as camadas.
 ---
 
 ## 📦 Como Executar o Projeto
