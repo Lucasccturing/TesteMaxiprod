@@ -46,7 +46,13 @@ Este projeto é uma aplicação Full Stack desenvolvida como teste técnico para
 * Node.js (v18+)
 
 ### Passo 1: Back-end
-1. Navegue até a pasta da API.
+1. Navegue até a pasta da API (/).
 2. Execute o comando para restaurar dependências e rodar a aplicação:
    ```bash
    dotnet watch run
+
+### Passo 2: Front-end
+1. Navegue até a pasta Frontend (/Frontend).
+2. Execute o comando para restaurar dependências e rodar a aplicação:
+   ```bash
+   npm run dev
