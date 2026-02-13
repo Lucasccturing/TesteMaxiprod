@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DDDo3Vs9KaM=",
+  "dgSpecHash": "tNui3LR4+/0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\lucas\\Desktop\\Maxiprod\\SistemaResidencial\\SistemaResidencial.csproj",
+  "projectFilePath": "C:\\Users\\lucas\\Desktop\\Maxiprod\\SistemaResidencial\\Backend\\SistemaResidencial.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lucas\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.7\\microsoft.entityframeworkcore.7.0.7.nupkg.sha512",
